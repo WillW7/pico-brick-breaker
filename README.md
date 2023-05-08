@@ -1,5 +1,5 @@
 # pico-brick-breaker
-
+adpted from pimoroni pico display examples found [here](https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/examples) (quite useful)
 ## Info
 
 Using micropython on the pimoroni pico display for the raspberry pi pico
