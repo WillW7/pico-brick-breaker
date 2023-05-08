@@ -19,8 +19,6 @@ led.set_rgb(0,0,0)
 
 WHITE = display.create_pen(255, 255, 255)
 BLACK = display.create_pen(0, 0, 0)
-CYAN = display.create_pen(0, 255, 255)
-MAGENTA = display.create_pen(255, 0, 255)
 YELLOW = display.create_pen(245, 199, 32)
 GREEN = display.create_pen(0, 255, 0)
 RED = display.create_pen(255, 0, 0)
@@ -65,11 +63,9 @@ for x in range(0,5):
     for y in range(0,5):
         bricks.append(
             Brick(
-                (x*brickW) + 1 + (x*2),
-                ((x+1)*brickW) + 1 + (x*2),
-                (y*brickH) + 1 + (y*2),
-                ((y+1)*brickH) + 1 + (y*2),
-                ))
+                # create 5 rows of 5 bricks as displayed in the readme
+                # hint: 0,0 is top left
+            )
 
 r = 7
 ball = Ball(
@@ -80,6 +76,12 @@ ball = Ball(
             (12 - r) / 2,
             YELLOW,
         )
+            
+#defines the bounds of the screen the ball bounces off
+xmax = WIDTH - ball.r
+xmin = ball.r
+ymax = HEIGHT - ball.r
+ymin = ball.r
 
 
 BG = display.create_pen(0, 0, 0)
@@ -93,45 +95,32 @@ while playing:
     
     
     display.set_pen(brickCol)
-    for brick in bricks:
-        display.rectangle(brick.minx, brick.miny, brickW, brickH)
+    #display all the bricks in bricks using display.rectangle(x,y,w,h)
         
-    if button_y.read() and paddle.x > 0:
-        paddle.x -= 10
-        
-    if button_x.read() and (paddle.x + paddleW) < WIDTH:
-        paddle.x += 10
     
     display.set_pen(BLUE)
     display.rectangle(paddle.x, paddleY, paddleW, paddleH)
+            
+     if button_y.read() and paddle.x > 0:
+        #move the paddle to the left
+        
+    #do the same for button x moving the paddle right making sure the paddle doesnt fall off the screen
     
-    if len(bricks) == 0:
-        playing = False
-        
-    ball.x += ball.dx
-    ball.y += ball.dy
+    #break from the loop if all the brokcs have been destroyed
+    
+    #change the balls postion
+    #hint: add the change to its pos
+    
+    # if the ball hits the paddle bounce the ball in the opposite direction
+    #hint: for dy... 1 and -1 are opposite directions
 
-    xmax = WIDTH - ball.r
-    xmin = ball.r
-    ymax = HEIGHT - ball.r
-    ymin = ball.r
-        
-    if ball.x >= paddle.x and ball.x <= paddle.x + paddleW and ball.y >= paddleY - paddleH:
-        ball.dy *= -1
-
-    if ball.x < xmin or ball.x > xmax:
-        ball.dx *= -1
-
-    if ball.y < ymin:
-        ball.dy *= -1
-    if ball.y > ymax:
-        playing = False
+    #if the ball hits the side or top wall bounce in opposite direction
+            
+    #if the ball hits the bottom break from the loop
         
         
     for brick in bricks:
-        if ball.x >= brick.minx and ball.x <= brick.maxx and ball.y - ball.r >= brick.miny and ball.y - ball.r <= brick.maxy:
-            ball.dy *= -1
-            bricks.remove(brick)
+         #if the ball hits a brick destroy it and bounce back
     
 
     display.set_pen(ball.pen)
@@ -139,19 +128,13 @@ while playing:
   
 
     display.update()
-    time.sleep(0.015)
+    time.sleep(0.015) #how often to check for input (also effects speed of ball)
     
 
 display.set_pen(BLACK)
 display.clear()
 
-if len(bricks) == 0:
-    display.set_pen(GREEN)
-    display.text("You Win!", 10, 10, WIDTH, 5)
-    led.set_rgb(0,50,0)
-else:
-    display.set_pen(RED)
-    display.text("Game Over!", 10, 10, WIDTH, 5)
-    led.set_rgb(50,0,0)
+# when game is over display win/lose msg on display depending on how the game ended
+
 
 display.update()
